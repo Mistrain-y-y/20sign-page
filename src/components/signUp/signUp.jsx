@@ -1,12 +1,22 @@
 import React, { Component } from 'react'
 import SignUpForm from './signUpForm'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
+import * as actions from '../../actions/actions'
 
-export default class SignUp extends Component {
+class SignUp extends Component {
   render() {
     return (
       <div>
-        <SignUpForm/>
+        <SignUpForm actions={this.props.actions}/>
+        {/* 将 actions 传递给表单组件 */}
       </div>
     )
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(actions, dispatch)
+})
+
+export default connect(null, mapDispatchToProps)(SignUp)
