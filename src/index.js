@@ -1,17 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import reactDOM from 'react-dom'
+import {createStore, applyMiddleware} from 'redux'
+import {Provider} from 'react-redux'
+import {BrowserRouter as Router} from 'react-router-dom'
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+import logger from 'redux-logger'
+import thunk from 'redux-thunk'
+import {composeWithDevTools} from 'redux-devtools-extension'
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+import Routes from './routes'
+import rootReducer from './reducers/rootReducer'
+import Nav from './components/nav/nav'
+
+// 创建全局管理 store
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(logger, thunk)))
+
+reactDOM.render(
+  <Provider store={store}>
+  <Router>
+    <Nav/>
+    <Routes/>
+  </Router>
+</Provider>, document.getElementById('root'))
