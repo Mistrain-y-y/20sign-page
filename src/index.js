@@ -11,6 +11,7 @@ import {composeWithDevTools} from 'redux-devtools-extension'
 import Routes from './routes'
 import rootReducer from './reducers/rootReducer'
 import Nav from './components/nav/nav'
+import FlashLists from './components/flash/flashLists'
 
 // 创建全局管理 store
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(logger, thunk)))
@@ -19,6 +20,7 @@ reactDOM.render(
   <Provider store={store}>
   <Router>
     <Nav/>
+    <FlashLists/>
     <Routes/>
   </Router>
 </Provider>, document.getElementById('root'))

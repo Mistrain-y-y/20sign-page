@@ -1,0 +1,2 @@
+export const ADD_FLASH_MSG = 'ADD_FLASH_MSG'
+export const REMOVE_FLASH_MSG = 'REMOVE_FLASH_MSG'

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 class SignUpForm extends Component {
   state = {
@@ -11,7 +11,7 @@ class SignUpForm extends Component {
   handleSubmit = e => {
     console.log(this.props)
     // 可以看到 props 里面没有 history, 因为当前组件没有直接被 Router 管理
-    // 可以通过父组件传递 history, 或者包裹 withRouter
+    // 可以通过父组件传递 history, 或者包裹高阶函数 withRouter
     e.preventDefault()
     this.setState({
       isLoading: true
@@ -24,6 +24,12 @@ class SignUpForm extends Component {
             errors: res.data.errors,
             isLoading: false
           })
+          // 注册成功的时候发送提示信息的 action
+          this.props.actions.addFlashMsg({
+            type: 'success',
+            text: '注册成功, 请登录!'
+          })
+
           this.props.history.replace('/')// 跳转页面
         }
       }, ({ response }) => {// 后台验证失败
@@ -62,7 +68,7 @@ class SignUpForm extends Component {
             <div className="form-group">
               <label htmlFor="password">password</label>
               <input
-                type="text"
+                type="password"
                 className="form-control"
                 name="password"
                 value={password}
