@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import {Route} from 'react-router-dom'
 import SignUp from './components/signUp/signUp'
 import Home from './components/home/home'
+import Login from './components/login/login'
 
 export default class Routes extends Component {
   render() {
@@ -10,6 +11,7 @@ export default class Routes extends Component {
       <div className="container">
         <Route path="/" exact component={Home}/>
         <Route path="/signup" exact component={SignUp}/>
+        <Route path="/login" exact component={Login}/>
       </div>
     )
   }

@@ -1,59 +1,33 @@
-import React, { Component } from 'react'
-import { withRouter } from 'react-router-dom'
+// 登录页面
 
-class SignUpForm extends Component {
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import * as actions from '../../actions/actions'
+import { bindActionCreators } from 'redux'
+
+class Login extends Component {
   state = {
     username: '',
     password: '',
     errors: {},
     isLoading: false
   }
-  checkUsername = e => {
-    const {value} = e.target
-    if (value.trim()) {// 输入了用户名就进行验证
-      this.props.actions.checkUsername(value)
-      .then(res => {
-        if (res.data.success) {
-          this.setState({
-            isLoading: false,
-            errors: {}
-          })
-        }
-      }, ({response}) => {
-        this.setState({
-          errors: response.data,
-          isLoading: true
-        })
-      })
-    }
-  }
-  handleSubmit = e => {
-    console.log(this.props)
-    // 可以看到 props 里面没有 history, 因为当前组件没有直接被 Router 管理
-    // 可以通过父组件传递 history, 或者包裹高阶函数 withRouter
+  handleLogin = e => {
     e.preventDefault()
     this.setState({
       isLoading: true
     })
     const { username, password } = this.state
-    this.props.actions.signUpRequest({ username, password })
-      .then(res => {
-        if (res.data.success) {// 如果后台验证成功
-          this.setState({
-            errors: res.data.errors,
-            isLoading: false
-          })
-          // 注册成功的时候发送提示信息的 action
-          this.props.actions.addFlashMsg({
-            type: 'success',
-            text: '注册成功, 请登录!'
-          })
-
-          this.props.history.replace('/login')// 跳转页面
-        }
-      }, ({ response }) => {// 后台验证失败
+    this.props.actions.loginAction({ username, password })
+      .then(res => {// 登陆成功
         this.setState({
-          errors: response.data,
+          errors: {},
+          isLoading: false
+        })
+        this.props.history.push('/')
+      }, ({ response }) => {// 登录失败
+        this.setState({
+          errors: response.data.errors,
           isLoading: false
         })
       })
@@ -70,8 +44,8 @@ class SignUpForm extends Component {
       <div>
         <div className="col-md-3"></div>
         <div className="col-md-6">
-          <h1>Sign In Page</h1>
-          <form onSubmit={this.handleSubmit}>
+          <h1>Login</h1>
+          <form onSubmit={this.handleLogin}>
             <div className="form-group">
               <label htmlFor="username">username</label>
               <input
@@ -80,7 +54,6 @@ class SignUpForm extends Component {
                 name="username"
                 value={username}
                 onChange={this.handleChange}
-                onBlur={this.checkUsername}
                 id="username" />
               {errors.username && <p>{errors.username}</p>}
               {/* 如果错误存在就显示 p 标签 */}
@@ -100,7 +73,7 @@ class SignUpForm extends Component {
               <input
                 type="submit"
                 className="btn btn-primary"
-                value="submit"
+                value="Login"
                 disabled={isLoading}
               />
             </div>
@@ -112,4 +85,10 @@ class SignUpForm extends Component {
   }
 }
 
-export default withRouter(SignUpForm)
+const mapDispatchToProps = dispatch => (
+  {
+    actions: bindActionCreators(actions, dispatch)
+  }
+)
+
+export default connect(state => state, mapDispatchToProps)(Login)

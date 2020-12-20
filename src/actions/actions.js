@@ -23,3 +23,13 @@ export const removeFlashMsg = id => (
     id
   }
 )
+
+// 失去焦点时发送请求验证用户名是否重复
+export const checkUsername = username => dispatch => {
+  return axios.get(`/api/users/${username}`)
+}
+
+// 登录
+export const loginAction = data => dispatch => {
+  return axios.post('/api/login', data)// data 是一个对象
+}
