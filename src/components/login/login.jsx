@@ -14,23 +14,35 @@ class Login extends Component {
   }
   handleLogin = e => {
     e.preventDefault()
-    this.setState({
-      isLoading: true
-    })
     const { username, password } = this.state
-    this.props.actions.loginAction({ username, password })
-      .then(res => {// 登陆成功
-        this.setState({
-          errors: {},
-          isLoading: false
-        })
-        this.props.history.push('/')
-      }, ({ response }) => {// 登录失败
-        this.setState({
-          errors: response.data.errors,
-          isLoading: false
-        })
+    if (username.trim() && password.trim()) {
+      this.setState({
+        isLoading: true
       })
+      this.props.actions.loginAction({ username, password })
+        .then(res => {// 登陆成功
+          this.setState({
+            errors: {},
+            isLoading: false
+          })
+          this.props.history.push('/')
+          this.props.actions.addFlashMsg({
+            text: '登陆成功!',
+            type: 'success'
+          })
+        }, ({ response }) => {// 登录失败
+          this.setState({
+            errors: response.data.errors,
+            isLoading: false
+          })
+        })
+    } else {// 如果用户名或密码没有输入
+      this.setState({
+        errors: {
+          password: '请输入用户名或密码!'
+        }
+      })
+    }
   }
   handleChange = e => {
     const { name, value } = e.target

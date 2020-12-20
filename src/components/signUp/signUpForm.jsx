@@ -8,25 +8,6 @@ class SignUpForm extends Component {
     errors: {},
     isLoading: false
   }
-  checkUsername = e => {
-    const {value} = e.target
-    if (value.trim()) {// 输入了用户名就进行验证
-      this.props.actions.checkUsername(value)
-      .then(res => {
-        if (res.data.success) {
-          this.setState({
-            isLoading: false,
-            errors: {}
-          })
-        }
-      }, ({response}) => {
-        this.setState({
-          errors: response.data,
-          isLoading: true
-        })
-      })
-    }
-  }
   handleSubmit = e => {
     console.log(this.props)
     // 可以看到 props 里面没有 history, 因为当前组件没有直接被 Router 管理
@@ -58,11 +39,44 @@ class SignUpForm extends Component {
         })
       })
   }
-  handleChange = e => {
+  handleChange = async e => {
     const { name, value } = e.target
-    this.setState({
+    await this.setState({
+      // 等待 setState 完成后再执行下面的操作, 修复 bug
+      // 如果不加 await, 总是先执行 this.checkUsername 再 setState
       [name]: value
     })
+    if (name === 'username') {
+      this.checkUsername()// 触发 onChange 事件后, 
+    }
+  }
+  checkUsername = () => {
+    const {username} = this.state
+    if (username.trim()) {// 输入了用户名就进行验证
+      this.setState({
+        // 修复 bug, 用户名验证需要一段时间, 验证的这段时间不可以注册
+        isLoading: true
+      })
+      this.props.actions.checkUsername(username.trim())
+      .then(res => {
+        if (res.data.success) {
+          this.setState({
+            isLoading: false,
+            errors: {}
+          })
+        }
+      }, ({response}) => {
+        this.setState({
+          errors: response.data,
+          isLoading: true
+        })
+      })
+    }
+  }
+  componentDidMount(){
+    // 为修复 chrome 自动填写不触发验证的 bug, 
+    // 组件一挂载就验证用户名是否已存在, 避免注册了重复的用户名
+    this.checkUsername()
   }
   render() {
     const { username, password, errors, isLoading } = this.state
@@ -80,7 +94,6 @@ class SignUpForm extends Component {
                 name="username"
                 value={username}
                 onChange={this.handleChange}
-                onBlur={this.checkUsername}
                 id="username" />
               {errors.username && <p>{errors.username}</p>}
               {/* 如果错误存在就显示 p 标签 */}
