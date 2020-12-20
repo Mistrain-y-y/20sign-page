@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
+import { withRouter} from 'react-router-dom'
 
-export default class SignUpForm extends Component {
+class SignUpForm extends Component {
   state = {
     username: '',
     password: '',
@@ -8,6 +9,9 @@ export default class SignUpForm extends Component {
     isLoading: false
   }
   handleSubmit = e => {
+    console.log(this.props)
+    // 可以看到 props 里面没有 history, 因为当前组件没有直接被 Router 管理
+    // 可以通过父组件传递 history, 或者包裹 withRouter
     e.preventDefault()
     this.setState({
       isLoading: true
@@ -20,6 +24,7 @@ export default class SignUpForm extends Component {
             errors: res.data.errors,
             isLoading: false
           })
+          this.props.history.replace('/')// 跳转页面
         }
       }, ({ response }) => {// 后台验证失败
         this.setState({
@@ -80,3 +85,5 @@ export default class SignUpForm extends Component {
     )
   }
 }
+
+export default withRouter(SignUpForm)
