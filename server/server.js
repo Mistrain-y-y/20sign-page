@@ -1,5 +1,5 @@
 const express = require('express')
-const users = require('./routers/router')
+const users = require('./routers/users')
 const login = require('./routers/login')
 const bodyParser = require('body-parser')
 

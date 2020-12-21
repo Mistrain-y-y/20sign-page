@@ -51,6 +51,12 @@ class SignUpForm extends Component {
     }
   }
   checkUsername = () => {
+    //--------------没写完的防抖操作---------------
+
+    // if (this.state.isLoading === true) {
+    //   // 上一次请求正在发送中, 取消上一次请求
+    //   source.cancel('Operation canceled by the user')
+    // }
     const {username} = this.state
     if (username.trim()) {// 输入了用户名就进行验证
       this.setState({

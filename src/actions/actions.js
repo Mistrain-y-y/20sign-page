@@ -26,7 +26,11 @@ export const removeFlashMsg = id => (
 
 // 失去焦点时发送请求验证用户名是否重复
 export const checkUsername = username => dispatch => {
-  return axios.get(`/api/users/${username}`)
+  // const CancelToken = axios.CancelToken
+  // const source = CancelToken.source()// 创建 cancel token
+  return axios.get(`/api/users/${username}`
+  // , {cancelToken: source.token}
+    )
 }
 
 // 登录
