@@ -16,7 +16,7 @@ export const signUpRequest = userData => dispatch => {
 
 // 增加提示信息
 export const addFlashMsg = msg => (
-  // msg 里面有 type 和 text
+  // msg 是一个对象, 里面有 type 和 text
   {
     type: ADD_FLASH_MSG,
     msg

@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../../actions/actions'
+import {withRouter} from 'react-router-dom'
 
 class Nav extends Component {
   handleLogOut = () => {
@@ -10,7 +11,7 @@ class Nav extends Component {
     this.props.actions.logOutAction()
   }
   render() {
-    const { isAuthenticated } = this.props
+    const { isAuthenticated } = this.props.auth
     return (
       <div className="navbar navbar-default">
         <NavLink
@@ -54,4 +55,4 @@ const mapDispatchToProps = dispatch => (
   {actions: bindActionCreators(actions, dispatch)}
 )
 
-export default connect(state => state.auth, mapDispatchToProps)(Nav)
+export default connect(state => state, mapDispatchToProps)(withRouter(Nav))
