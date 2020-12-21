@@ -1,2 +1,4 @@
 export const ADD_FLASH_MSG = 'ADD_FLASH_MSG'
 export const REMOVE_FLASH_MSG = 'REMOVE_FLASH_MSG'
+export const SET_CURRENT_USER = 'SET_CURRENT_USER'
+export const REMOVE_USER = 'REMOVE_USER'
